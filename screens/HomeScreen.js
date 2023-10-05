@@ -1,6 +1,7 @@
 import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { colors } from '../theme'
+import randomImage from '../assets/png/randomImage'
 
 const items = [
     {
@@ -75,7 +76,7 @@ export default function HomeScreen() {
                             <TouchableOpacity className='bg-white rounded-2xl mb-3 shadow-sm'>
                                 <View>
                                     <Image 
-                                        source={require('../assets/png/1.png')}
+                                        source={randomImage()}
                                         className='w-36 h-36'
                                         />
                                     <Text className={`${colors.heading} font-bold`}>{item.place}</Text>
