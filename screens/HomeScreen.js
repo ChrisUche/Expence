@@ -2,6 +2,39 @@ import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 import React, { useLayoutEffect } from 'react'
 import { colors } from '../theme'
 
+const items = [
+    {
+        id: 1,
+        place: 'Abuja',
+        country: 'Nigeria',
+    },
+    {
+        id: 2,
+        place: 'Zanzibar',
+        country: 'Tanzania',
+    },
+    {
+        id: 3,
+        place: 'Paris',
+        country: 'France',
+    },
+    {
+        id: 4,
+        place: 'Los Angeles',
+        country: 'America',
+    },
+    {
+        id: 5,
+        place: 'Paris',
+        country: 'France',
+    },
+    {
+        id: 6,
+        place: 'Los Angeles',
+        country: 'America',
+    }
+]
+
 export default function HomeScreen() {
 
   return (
@@ -20,15 +53,37 @@ export default function HomeScreen() {
                 className='w-60 h-60'
                 />
         </View>
-        <View className='px-4'>
+        <View className='px-4 space-y-3'>
             <View className='flex-row justify-between items-center'>
                 <Text className={`${colors.heading} font-bold text-xl`}>Recent Trips</Text>
                 <TouchableOpacity>
                     <Text className={colors.heading}>Add Trip</Text>
                 </TouchableOpacity>
             </View>
-            <View>
-                <FlatList />
+            <View style={{height:430}}>
+                <FlatList 
+                    data={items}
+                    numColumns={2}
+                    keyExtractor={item => item.id}
+                    columnWrapperStyle={{
+                        justifyContent: 'space-between' //to split the trip cards
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    className='mx-1'
+                    renderItem={({item}) => {
+                        return(
+                            <TouchableOpacity className='bg-white rounded-2xl mb-3 shadow-sm'>
+                                <View>
+                                    <Image 
+                                        source={require('../assets/png/1.png')}
+                                        className='w-36 h-36'
+                                        />
+                                    <Text className={`${colors.heading} font-bold`}>{item.place}</Text>
+                                    <Text className={`${colors.heading} text-xs`}>{item.country}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    }}/>
             </View>
         </View>
     </SafeAreaView>
