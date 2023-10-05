@@ -1,7 +1,10 @@
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
+
+const { width } = Dimensions.get('window');
+const isSmallScreen = width <= 375;
 
 const items = [
     {
@@ -77,7 +80,7 @@ export default function HomeScreen() {
                                 <View>
                                     <Image 
                                         source={randomImage()}
-                                        className='w-36 h-36 mb-2'
+                                        className={`${isSmallScreen ? 'w-24 h-24 mb-2' : 'w-36 h-36 mb-2'}`} //because screen sizes differ on small screens 24 is used else 36
                                         />
                                     <Text className={`${colors.heading} font-bold`}>{item.place}</Text>
                                     <Text className={`${colors.heading} text-xs`}>{item.country}</Text>
