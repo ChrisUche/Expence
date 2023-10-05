@@ -2,6 +2,7 @@ import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableO
 import React, { useLayoutEffect } from 'react'
 import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
+import EmptyList from '../components/emptyList';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -67,6 +68,7 @@ export default function HomeScreen() {
             <View style={{height:430}}>
                 <FlatList 
                     data={items}
+                    ListEmptyComponent={<EmptyList message={'You have not recorded any trips yet'}/>}
                     numColumns={2}
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{
@@ -80,7 +82,7 @@ export default function HomeScreen() {
                                 <View>
                                     <Image 
                                         source={randomImage()}
-                                        className={`${isSmallScreen ? 'w-24 h-24 mb-2' : 'w-36 h-36 mb-2'}`} //because screen sizes differ on small screens 24 is used else 36
+                                        className={`${isSmallScreen ? 'w-32 h-24 mb-2' : 'w-36 h-36 mb-2'}`} //because screen sizes differ on small screens 24 is used else 36
                                         />
                                     <Text className={`${colors.heading} font-bold`}>{item.place}</Text>
                                     <Text className={`${colors.heading} text-xs`}>{item.country}</Text>
