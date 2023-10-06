@@ -3,6 +3,7 @@ import React, { useLayoutEffect } from 'react'
 import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
 import EmptyList from '../components/emptyList';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -41,7 +42,7 @@ const items = [
 ]
 
 export default function HomeScreen() {
-
+    const navigation = useNavigation()
   return (
     <SafeAreaView className="flex-1">
         <View className='flex-row items-center justify-between p-4'>
@@ -61,7 +62,7 @@ export default function HomeScreen() {
         <View className='px-4 space-y-3'>
             <View className='flex-row justify-between items-center'>
                 <Text className={`${colors.heading} font-bold text-xl`}>Recent Trips</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AddTrip')}>
                     <Text className={colors.heading}>Add Trip</Text>
                 </TouchableOpacity>
             </View>

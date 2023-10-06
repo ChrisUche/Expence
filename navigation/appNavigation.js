@@ -3,6 +3,8 @@ import { TailwindProvider } from "tailwindcss-react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
+import AddExpenceScreen from "../screens/AddExpenceScreen";
+import AddTripScreen from "../screens/AddTripScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +15,8 @@ export default function AppNavigation() {
       <TailwindProvider>
         <Stack.Navigator>
           <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen} />
+          <Stack.Screen options={{headerShown: false}} name="AddTrip" component={AddTripScreen} />
+          <Stack.Screen options={{headerShown: false}} name="AddExpence" component={AddExpenceScreen} />
         </Stack.Navigator>
       </TailwindProvider>
     </NavigationContainer>
