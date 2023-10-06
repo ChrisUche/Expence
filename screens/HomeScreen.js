@@ -79,7 +79,7 @@ export default function HomeScreen() {
                     className='mx-1'
                     renderItem={({item}) => {
                         return(
-                            <TouchableOpacity className='bg-white p-3 rounded-2xl mb-3 shadow-sm'>
+                            <TouchableOpacity onPress={() => navigation.navigate('TripExpenses')} className='bg-white p-3 rounded-2xl mb-3 shadow-sm'>
                                 <View>
                                     <Image 
                                         source={randomImage()}
