@@ -1,11 +1,13 @@
 import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
 import EmptyList from '../components/emptyList';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { signOut } from '@firebase/auth';
-import { auth } from '../config/firebase';
+import { auth, tripsRef } from '../config/firebase';
+import { useSelector } from 'react-redux';
+import { getDocs, query, where } from '@firebase/firestore';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -46,6 +48,26 @@ const items = [
 export default function HomeScreen() {
     const navigation = useNavigation()
 
+    const {user} =useSelector(state => state.user); //importing the user data to fetch trip
+    const [trips, setTrips] = useState([]);
+
+    const isFocused = useIsFocused();
+
+    const fetchTrips = async ()=>{
+        const q = query(tripsRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        let data = []
+        querySnapshot.forEach(doc=>{
+            data.push({...doc.data(), id: doc.id})
+        })
+        setTrips(data);
+    }
+
+    useEffect(()=>{
+        if(isFocused)
+            fetchTrips();
+    },[isFocused])
+
     const handleLogOut = async ()=>{
         await signOut(auth)
     }
@@ -68,13 +90,13 @@ export default function HomeScreen() {
         <View className='px-4 space-y-3'>
             <View className='flex-row justify-between items-center'>
                 <Text className={`${colors.heading} font-bold text-xl`}>Recent Trips</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('AddTrip')}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddTrip')} className='p-2 px-3 bg-white border border-gray-200 rounded-full'>
                     <Text className={colors.heading}>Add Trip</Text>
                 </TouchableOpacity>
             </View>
             <View style={{height:430}}>
                 <FlatList 
-                    data={items}
+                    data={trips}
                     ListEmptyComponent={<EmptyList message={'You have not recorded any trips yet'}/>}
                     numColumns={2}
                     keyExtractor={item => item.id}
