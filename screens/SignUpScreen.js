@@ -5,19 +5,32 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/core';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { auth } from '../config/firebase';
+import { setUserLoading } from '../redux/slices/user';
+import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../components/loading';
 
 export default function SignInScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {userLoading} = useSelector(state => state.user)
 
     const navigation = useNavigation();
+
+    const dispatch =useDispatch();
 
     const handleSubmit = async()=>{
         if(email && password){
             //good to go
             // navigation.goBack();
             // navigation.navigate('Welcome');
-           await createUserWithEmailAndPassword(auth, email, password)
+           try{
+            dispatch(setUserLoading(true));
+            await createUserWithEmailAndPassword(auth, email, password)
+           dispatch(setUserLoading(false));
+        }catch(e){
+           dispatch(setUserLoading(false));
+
+        }
         }else{
             //show error message
         }
@@ -55,12 +68,18 @@ export default function SignInScreen() {
             </View>
         </View>
         <View>
-            <TouchableOpacity
-                onPress={handleSubmit}
-                style={{backgroundColor: colors.button}}
-                className='my-6 rounded-full p-3 shadow-sm mx-2'>
-                <Text className='text-white text-lg text-center font-bold'>Sign Up</Text>
-            </TouchableOpacity>
+        {
+                userLoading? (
+                    <Loading/>
+                ):(
+                    <TouchableOpacity
+                        onPress={handleSubmit}
+                        style={{backgroundColor: colors.button}}
+                        className='my-6 rounded-full p-3 shadow-sm mx-2'>
+                        <Text className='text-white text-lg text-center font-bold'>Sign Up</Text>
+                    </TouchableOpacity>
+                )
+        }
         </View>
       </View>
     </SafeAreaView>
