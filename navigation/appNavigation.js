@@ -9,26 +9,38 @@ import TripExpensesScreen from "../screens/TripExpensesScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import SignInScreen from "../screens/SignInScreen";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 
 export default function AppNavigation() {
-  return (
-    <NavigationContainer>
-      <TailwindProvider>
-        <Stack.Navigator initialRouteName="Welcome">
-          <Stack.Screen options={{headerShown: false, presentation:'modal'}} name="SignIn" component={SignInScreen} />
-          <Stack.Screen options={{headerShown: false, presentation:'modal'}} name="SignUp" component={SignUpScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen} />
-          <Stack.Screen options={{headerShown: false}} name="AddTrip" component={AddTripScreen} />
-          <Stack.Screen options={{headerShown: false}} name="AddExpence" component={AddExpenceScreen} />
-          <Stack.Screen options={{headerShown: false}} name="TripExpenses" component={TripExpensesScreen} />
-        </Stack.Navigator>
-      </TailwindProvider>
-    </NavigationContainer>
-    
-    
-  );
+  const {user} = useSelector(state=> state.user);
+
+  if(user){
+        return (
+          <NavigationContainer>
+            <TailwindProvider>
+              <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen} />
+                <Stack.Screen options={{headerShown: false}} name="AddTrip" component={AddTripScreen} />
+                <Stack.Screen options={{headerShown: false}} name="AddExpence" component={AddExpenceScreen} />
+                <Stack.Screen options={{headerShown: false}} name="TripExpenses" component={TripExpensesScreen} />
+              </Stack.Navigator>
+            </TailwindProvider>
+          </NavigationContainer>
+        );
+  }else{
+      return (
+        <NavigationContainer>
+          <TailwindProvider>
+            <Stack.Navigator initialRouteName="Welcome">
+              <Stack.Screen options={{headerShown: false, presentation:'modal'}} name="SignIn" component={SignInScreen} />
+              <Stack.Screen options={{headerShown: false, presentation:'modal'}} name="SignUp" component={SignUpScreen} />
+              <Stack.Screen options={{headerShown: false}} name="Welcome" component={WelcomeScreen} />
+            </Stack.Navigator>
+          </TailwindProvider>
+        </NavigationContainer>
+      );
+  }
 }
