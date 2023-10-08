@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
                     Sign In
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}  className='p-3 rounded-full shadow' style={{backgroundColor: colors.button}}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}  className='p-3 rounded-full shadow' style={{backgroundColor: colors.button}}>
                 <Text className='text-center text-white text-lg font-bold'>
                     Sign Up
                 </Text>
