@@ -4,6 +4,8 @@ import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
 import EmptyList from '../components/emptyList';
 import { useNavigation } from '@react-navigation/native';
+import { signOut } from '@firebase/auth';
+import { auth } from '../config/firebase';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -43,11 +45,15 @@ const items = [
 
 export default function HomeScreen() {
     const navigation = useNavigation()
+
+    const handleLogOut = async ()=>{
+        await signOut(auth)
+    }
   return (
     <SafeAreaView className="flex-1">
         <View className='flex-row items-center justify-between p-4'>
             <Text className={`${colors.heading} font-bold text-3xl shadow-sm`}>Expense</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Welcome')} className='p-2 px-3 bg-white border border-gray-200 rounded-full'>
+            <TouchableOpacity onPress={handleLogOut} className='p-2 px-3 bg-white border border-gray-200 rounded-full'>
                 <Text className={`${colors.heading}`}>
                     Logout
                 </Text>

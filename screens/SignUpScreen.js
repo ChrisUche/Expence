@@ -3,6 +3,8 @@ import { colors } from '../theme'
 import BackButton from '../components/backButton'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/core';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { auth } from '../config/firebase';
 
 export default function SignInScreen() {
     const [email, setEmail] = useState('');
@@ -10,11 +12,12 @@ export default function SignInScreen() {
 
     const navigation = useNavigation();
 
-    const handleSubmit = ()=>{
+    const handleSubmit = async()=>{
         if(email && password){
             //good to go
-            navigation.goBack();
-            navigation.navigate('Welcome');
+            // navigation.goBack();
+            // navigation.navigate('Welcome');
+           await createUserWithEmailAndPassword(auth, email, password)
         }else{
             //show error message
         }
