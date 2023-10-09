@@ -1,11 +1,13 @@
 import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { colors } from '../theme'
 import randomImage from '../assets/png/randomImage'
 import EmptyList from '../components/emptyList';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import BackButton from '../components/backButton';
 import ExpenseCard from '../components/expenseCard';
+import { getDocs, query, where } from '@firebase/firestore';
+import { expensesRef } from '../config/firebase';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -38,8 +40,29 @@ const items = [
 ]
 
 export default function TripExpensesScreen(props) {
-    const {id, place, country} = props.route.params;
+    const {id, place, country} = props.route.params; //this data is fetched from homescreen
     const navigation = useNavigation();
+    const [expenses, setExpenses] = useState([]);
+
+
+    const isFocused = useIsFocused();
+
+    //fetchTrips is to fetch the trips from firebase/firestore
+    const fetchExpenses = async ()=>{
+        const q = query(expensesRef, where("tripId", "==", id));
+        const querySnapshot = await getDocs(q);
+        let data = []
+        querySnapshot.forEach(doc=>{
+            data.push({...doc.data(), id: doc.id})
+        })
+        setExpenses(data);
+    }
+
+    //useEffect calls fetchTrips when ever a components molds
+    useEffect(()=>{
+        if(isFocused)
+        fetchExpenses();
+    },[isFocused])
   return (
     <SafeAreaView className="flex-1">
         <View className='px-4'>
@@ -61,13 +84,13 @@ export default function TripExpensesScreen(props) {
             <View className=' space-y-3'>
                 <View className='flex-row justify-between items-center'>
                     <Text className={`${colors.heading} font-bold text-xl`}>Expenses</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('AddExpence')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AddExpence', {id, place, country})}>
                         <Text className={colors.heading}>Add Expenses</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{height:430}}>
                     <FlatList 
-                        data={items}
+                        data={expenses}
                         ListEmptyComponent={<EmptyList message={'You have not recorded any Expenses yet'}/>}
                         keyExtractor={item => item.id}
                         showsVerticalScrollIndicator={false}

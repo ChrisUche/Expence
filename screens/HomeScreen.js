@@ -48,11 +48,12 @@ const items = [
 export default function HomeScreen() {
     const navigation = useNavigation()
 
-    const {user} =useSelector(state => state.user); //importing the user data to fetch trip
+    const {user} =useSelector(state => state.user); //importing the user data to fetch trip from redux
     const [trips, setTrips] = useState([]);
 
     const isFocused = useIsFocused();
 
+    //fetchTrips is to fetch the trips from firebase/firestore
     const fetchTrips = async ()=>{
         const q = query(tripsRef, where("userId", "==", user.uid));
         const querySnapshot = await getDocs(q);
@@ -63,6 +64,7 @@ export default function HomeScreen() {
         setTrips(data);
     }
 
+    //useEffect calls fetchTrips when ever a components molds
     useEffect(()=>{
         if(isFocused)
             fetchTrips();

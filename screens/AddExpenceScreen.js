@@ -4,19 +4,34 @@ import BackButton from '../components/backButton'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/core';
 import { categories } from '../constants'
+import { addDoc } from '@firebase/firestore';
+import { expensesRef } from '../config/firebase';
+import Loading from '../components/loading';
 
 
-export default function AddTripScreen() {
+export default function AddTripScreen(props) {
+    let {id} = props.route.params;
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [amount, setAmount] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
 
-    const handleAddExpence = ()=>{
+    const handleAddExpence = async ()=>{
         if(title && amount && category){
             //good to go
-            navigation.goBack()
+            // navigation.goBack()
+            setLoading(true);
+            let doc = await addDoc(expensesRef, {
+              title,
+              amount,
+              category,
+              tripId: id
+            })
+            setLoading(false);
+            if(doc && doc.id) navigation.goBack();
+
         }else{
             //show error message
         }
@@ -71,12 +86,18 @@ export default function AddTripScreen() {
             </View>
         </View>
         <View>
-            <TouchableOpacity
-                onPress={handleAddExpence}
-                style={{backgroundColor: colors.button}}
-                className='my-6 rounded-full p-3 shadow-sm mx-2'>
-                <Text className='text-white text-lg text-center font-bold'>Add Expense</Text>
-            </TouchableOpacity>
+        {
+                loading? (
+                    <Loading />
+                ):(
+                    <TouchableOpacity
+                        onPress={handleAddExpence}
+                        style={{backgroundColor: colors.button}}
+                        className='my-6 rounded-full p-3 shadow-sm mx-2'>
+                        <Text className='text-white text-lg text-center font-bold'>Add Expense</Text>
+                    </TouchableOpacity>
+                  )
+        }
         </View>
       </ScrollView>
     </SafeAreaView>
