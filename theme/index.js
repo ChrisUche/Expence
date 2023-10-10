@@ -4,9 +4,9 @@ export const colors = {
 }
 
 export const categoryBG = {
-    food: "#E1D3EE",
+    food: "#1db390",
     transportation: '#B0E3D3',
-    entertainment: '#EcFAD7',
-    shopping: '#ffdffd',
+    entertainment: '#a32933',
+    shopping: '#a36441',
     other: '#CAD309'
 }
